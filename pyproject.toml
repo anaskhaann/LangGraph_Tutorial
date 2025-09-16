@@ -9,6 +9,7 @@ dependencies = [
     "langchain>=0.3.27",
     "langchain-groq>=0.3.8",
     "langgraph>=0.6.7",
+    "streamlit>=1.49.1",
 ]
 
 [dependency-groups]
