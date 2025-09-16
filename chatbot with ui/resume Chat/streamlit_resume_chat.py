@@ -13,17 +13,32 @@ def generate_thread_id():
     return thread_id
 
 
+# New Chat Functionality
 def reset_chat():
     thread_id = generate_thread_id()
 
     # store it in session
     st.session_state["thread_id"] = thread_id
 
+    # also add thread id to chat list
+    add_thread(thread_id)
+
     # reset message history
     st.session_state["message_history"] = []
 
 
+# Add Thread to thread list for switching chats
+def add_thread(thread_id):
+    # first check if thread_id is in list or not
+    if thread_id not in st.session_state["chat_threads"]:
+        st.session_state["chat_threads"].append(
+            thread_id
+        )  # we need to append not replace
+
+
 # *************** Session StartUp *****************
+
+
 if "message_history" not in st.session_state:
     st.session_state["message_history"] = []
 
@@ -31,9 +46,24 @@ if "message_history" not in st.session_state:
 if "thread_id" not in st.session_state:
     st.session_state["thread_id"] = generate_thread_id()
 
+
+# retain thread list
+# How many times we need to add the thread id in list
+# 2 times -> 1: When Page Loads, 2:When New Chat is Created(Thus create utility function)
+# create list
+if "chat_threads" not in st.session_state:
+    st.session_state["chat_threads"] = []
+
+# add current thread to list
+add_thread(st.session_state["thread_id"])
+
+
 # For different chat we have different thread id thus we need to put it inside input condition rather than keeping it global because each session id is coming from top list and for a particular chat if the thread id is same then we can print the previous messages also
 CONFIG = {"configurable": {"thread_id": st.session_state["thread_id"]}}
+
+
 # ***************** Side Bar *********************
+
 
 st.sidebar.title("Chat GPT Ultra")
 
@@ -42,10 +72,13 @@ if st.sidebar.button("New Chat"):
 
 st.sidebar.header("Your Chats")
 
-st.sidebar.text(st.session_state["thread_id"])
+# Display list of thread_ids
+for id in st.session_state["chat_threads"]:
+    st.sidebar.button(str(id))
 
 
 # ******************** Main UI ********************
+
 
 # To print all message
 for message in st.session_state["message_history"]:
