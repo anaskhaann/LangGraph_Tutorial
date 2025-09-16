@@ -9,8 +9,18 @@ from langgraph_backend import workflow
 
 # Generate Random Thread id
 def generate_thread_id():
-    thread_id = uuid.uuid4
+    thread_id = uuid.uuid4()
     return thread_id
+
+
+def reset_chat():
+    thread_id = generate_thread_id()
+
+    # store it in session
+    st.session_state["thread_id"] = thread_id
+
+    # reset message history
+    st.session_state["message_history"] = []
 
 
 # *************** Session StartUp *****************
@@ -21,15 +31,14 @@ if "message_history" not in st.session_state:
 if "thread_id" not in st.session_state:
     st.session_state["thread_id"] = generate_thread_id()
 
-# For different chat we have different thread id thus we need to put it inside input condition rather than keeping it local
+# For different chat we have different thread id thus we need to put it inside input condition rather than keeping it global because each session id is coming from top list and for a particular chat if the thread id is same then we can print the previous messages also
 CONFIG = {"configurable": {"thread_id": st.session_state["thread_id"]}}
-
-
 # ***************** Side Bar *********************
 
 st.sidebar.title("Chat GPT Ultra")
 
-st.sidebar.button("New Chat")
+if st.sidebar.button("New Chat"):
+    reset_chat()
 
 st.sidebar.header("Your Chats")
 
