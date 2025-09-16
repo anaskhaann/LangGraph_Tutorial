@@ -46,35 +46,25 @@ graph.add_edge("chat_node", END)
 workflow = graph.compile(checkpointer=checkpoints)
 
 if __name__ == "__main__":
-    # Till now we used to do workflow.invoke()
-
-    """
-    We will use `.stream` instead of invoke
-    1. Here you need to send Initial State
-    2. Our Config to provide thread id
-    3. Stream Mode(custom,messages,updates etc)
-    """
-
-    # This is for testing we will use this same in frontend in place of invoke
-    stream = workflow.stream(
-        # initial state
+    CONFIG = {"configurable": {"thread_id": "1"}}
+    result = workflow.invoke(
         {
             "messages": HumanMessage(
                 content="Tell the Difference Between Machine Learning and Deep learning in Simple and Short Explaination"
             )
         },
         # Config
-        config={"configurable": {"thread_id": "thread-1"}},
-        # Stream Mode
-        stream_mode="messages",
+        config=CONFIG,
     )
 
-    # print(type(stream))
+    """We need to extract the messages associated with those thread"""
+    # pass those config
+    print("=" * 100)
 
-    """
-    The stream is generator object and it has two items.
-    message_chunk and meta_data
-    """
-    for message_chunk, meta_data in stream:
-        if message_chunk.content:
-            print(message_chunk.content, end=" ", flush=True)
+    # print(workflow.get_state(config=CONFIG))
+
+    # get value attribute from this snapshot object
+    # print(workflow.get_state(config=CONFIG).values)
+
+    # from those values dic get messages
+    print(workflow.get_state(config=CONFIG).values["messages"])

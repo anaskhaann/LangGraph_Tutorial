@@ -36,6 +36,13 @@ def add_thread(thread_id):
         )  # we need to append not replace
 
 
+# TO load all conversation of particular thread
+def load_conversation(thread_id):
+    return workflow.get_state(config={"configurable": {"thread_id": thread_id}}).values[
+        "messages"
+    ]
+
+
 # *************** Session StartUp *****************
 
 
@@ -72,9 +79,30 @@ if st.sidebar.button("New Chat"):
 
 st.sidebar.header("Your Chats")
 
-# Display list of thread_ids
-for id in st.session_state["chat_threads"]:
-    st.sidebar.button(str(id))
+# Display list of thread_ids(Reverse for giving latest chat at top)
+for id in st.session_state["chat_threads"][::]:
+    # Load the conversation for the button clicked
+    if st.sidebar.button(str(id)):
+        # also store it in thread id
+        st.session_state["thread_id"] = id
+
+        # Here the issue is the format of the message which we are getting from load conversation is in HumanMessage format but our message history is in role and content dictionary so we need to manually write some code
+        messages = load_conversation(id)
+
+        temp_messages = []
+
+        # We are just extracting the role and content and append it to temp dictionary
+
+        # Then in last we are appending our temp message to actual message history
+
+        for _ in temp_messages:
+            if isinstance(_, HumanMessage):
+                role = "user"
+            else:
+                role = "assistant"
+            temp_messages.append({"role": role, "content": _.content})
+
+        st.session_state["message_history"] = temp_messages
 
 
 # ******************** Main UI ********************
