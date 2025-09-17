@@ -38,9 +38,10 @@ def add_thread(thread_id):
 
 # TO load all conversation of particular thread
 def load_conversation(thread_id):
-    return workflow.get_state(config={"configurable": {"thread_id": thread_id}}).values[
-        "messages"
-    ]
+    state = workflow.get_state(config={"configurable": {"thread_id": thread_id}})
+
+    # Check if the message key exists in state values, return empty list if not
+    return state.values.get("messages", [])
 
 
 # *************** Session StartUp *****************
@@ -65,7 +66,6 @@ if "chat_threads" not in st.session_state:
 add_thread(st.session_state["thread_id"])
 
 
-# For different chat we have different thread id thus we need to put it inside input condition rather than keeping it global because each session id is coming from top list and for a particular chat if the thread id is same then we can print the previous messages also
 CONFIG = {"configurable": {"thread_id": st.session_state["thread_id"]}}
 
 
