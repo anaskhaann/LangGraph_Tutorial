@@ -11,3 +11,8 @@ wheels/
 
 # FIles
 .env
+*.db
+*.sqlite
+*.sql
+*.db-shm
+*.db-wal

@@ -185,4 +185,22 @@ In this we dont have to change out Backend Only Front End Needs to Modify.
   - Get the thread id
   - thread id from message history and print those thread messages
 
+> For this part we have to use our logical capability and test how to extract messages for a particular thread using that id with the help of get_state(). And other logics of how to handle eveything
+
+---
+
+# Add Database Storage
+
+This will help to storage all conversation permanently. This will ensure that even when the program is closed or we refresh the web page we will still have the history
+
+- Install langgraph-checkpointer-sqlite and Import sqlite saver
+- Connect this saver to connection object of the database
+- Make sure to set same_thread for database = False
+
+- get list of all threads using checkpoints
+- since thread will repeat because we will have Multiple checkpoints for A thread so we can store the thread in sets for getting only thread id and return the list of the threads
+- In ui rather than initalizing the chat_threads as empty list we will now check with backend that how many thread id are there i.e retrieve list of thread id from backend
+
+---
+
 Made with ❤️ by **Mohd Anas**
