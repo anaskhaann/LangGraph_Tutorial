@@ -201,6 +201,29 @@ This will help to storage all conversation permanently. This will ensure that ev
 - since thread will repeat because we will have Multiple checkpoints for A thread so we can store the thread in sets for getting only thread id and return the list of the threads
 - In ui rather than initalizing the chat_threads as empty list we will now check with backend that how many thread id are there i.e retrieve list of thread id from backend
 
+# Add Observability for ChatBot
+
+Dont need to do much work just here just set the environment variables and project name.
+You can do this by adding the below to your `.env` files.
+
+```bash
+LANGSMITH_TRACING=true
+
+LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+
+LANGSMITH_API_KEY = "Your Api key"
+```
+
+Set the project name using `os.environ['LANGSMITH_PROJECT'] = 'project-name'`
+
+---
+
+# Tools in Lang Graph
+
+- We need to use prebuilt `ToolNode` class which helps us to create tool node in LangGraph
+- We need `Tool Condition` edge which decide wether to use a tool or not. Remember always name your tool node as `tools` because the tool condition return a literal of nodes name which are either 'tools' or 'end' which is then used to go to the tool node or end node depending on the return value.
+- With this we get tool message and AI message in our response so at fronend side we need to make changes to filter only AI message and not show tool messages.
+
 ---
 
 Made with ❤️ by **Mohd Anas**

@@ -5,8 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13.7"
 dependencies = [
+    "ddgs>=9.6.0",
     "dotenv>=0.9.9",
     "langchain>=0.3.27",
+    "langchain-community>=0.3.29",
     "langchain-groq>=0.3.8",
     "langgraph>=0.6.7",
     "langgraph-checkpoint-sqlite>=2.0.11",
